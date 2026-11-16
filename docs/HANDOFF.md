@@ -211,8 +211,12 @@ localStorage["ldhd-v1"] = {
 9. **Mã chết:** `lastResult` (dòng 389) và `isZh` (dòng 344) không ai dùng; `VOCAB.reverse();
    VOCAB.reverse();` (cuối dòng 321) là no-op; `--font-zh` và `--font-zh-sans` khai báo y hệt nhau.
 10. **Không có nút đặt lại toàn bộ tiến độ** (chỉ đặt lại được từng bộ từ).
-
----
+11. ✱ **App luyện câu lẻ, trong khi đề thi ra cả đoạn.** Luyện từng câu rèn được thuật ngữ và khuôn
+    câu, nhưng không rèn đúng chỗ khó của bài thi: giữ mạch logic và gọi các bên nhất quán xuyên
+    suốt một điều khoản dài, dưới áp lực thời gian và không được tra từ. Hướng xử lý: thêm chế độ
+    thi thử — ghép 3–5 câu cùng `doc` thành một đoạn, bấm giờ, chấm cả đoạn; prompt chấm khi đó
+    phải thêm tiêu chí **nhất quán thuật ngữ và xưng hô giữa các câu**, thứ hiện không ai kiểm vì
+    mỗi câu chấm riêng.
 
 ## 8. Nghiệm thu
 
