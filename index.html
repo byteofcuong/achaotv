@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luyện dịch hợp đồng</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<style>
+/* Layout: one narrow column on a dotted pink paper, pill tabs; bubbly cards; the heart-stamp score is the one accent. */
+:root{
+  --paper:#fff4f8;
+  --card:#ffffff;
+  --ink:#4a2a3a;
+  --muted:#9a6b80;
+  --line:#f7cfe0;
+  --seal:#ff5c9a;
+  --seal-soft:#ffe3ee;
+  --jade:#2fa37a;
+  --jade-soft:#e2f7ee;
+  --amber:#c27a00;
+  --amber-soft:#fff2d6;
+  --dots:#ffd6e7;
+  --font-body:"Quicksand","Be Vietnam Pro","Segoe UI",system-ui,sans-serif;
+  --font-zh:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  --font-zh-sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  --font-cute:"ZCOOL KuaiLe","Noto Sans SC",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#2a1822;--card:#3a2230;--ink:#ffe6f0;--muted:#e0a9c1;--line:#5c3249;
+    --seal:#ff7eb0;--seal-soft:#4f2438;--jade:#5fd3a6;--jade-soft:#1f3a31;--amber:#f2b74a;--amber-soft:#3f2f12;--dots:#3a2230;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#2a1822;--card:#3a2230;--ink:#ffe6f0;--muted:#e0a9c1;--line:#5c3249;
+  --seal:#ff7eb0;--seal-soft:#4f2438;--jade:#5fd3a6;--jade-soft:#1f3a31;--amber:#f2b74a;--amber-soft:#3f2f12;--dots:#3a2230;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background-color:var(--paper);background-image:radial-gradient(var(--dots) 1.5px,transparent 1.6px);background-size:22px 22px;color:var(--ink);font:500 15px/1.6 var(--font-body);-webkit-font-smoothing:antialiased}
+.zh{font-family:var(--font-zh-sans)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 64px}
+header.top{padding:20px 0 12px;display:grid;gap:10px}
+h1{margin:0;font-size:24px;font-weight:700;line-height:1.25;text-wrap:balance}
+h1 span{font-family:var(--font-cute);font-weight:400;color:var(--seal);margin-right:8px;font-size:26px}
+h1 i{font-style:normal;color:var(--seal);margin-left:6px}
+.sub{color:var(--muted);font-size:13px;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px}
+.stat{background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:6px 10px;font-size:13px;color:var(--muted)}
+.stat b{color:var(--ink);font-variant-numeric:tabular-nums}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--paper);display:flex;gap:6px;margin:0 -16px;padding:8px 16px}
+nav.tabs a{flex:1;text-align:center;padding:9px 6px;color:var(--muted);text-decoration:none;font-weight:700;font-size:14px;border-radius:999px;background:var(--card);border:1.5px solid var(--line)}
+nav.tabs a[aria-current="page"]{color:#fff;background:var(--seal);border-color:var(--seal);box-shadow:0 3px 0 color-mix(in srgb,var(--seal) 60%,#000 0%)}
+nav.tabs a:focus-visible,button:focus-visible,select:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+section.view{display:none;padding-top:16px}
+section.view.on{display:grid;gap:14px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:none;color:var(--muted);padding:7px 12px;font:700 13px var(--font-body);cursor:pointer;border-radius:999px}
+.seg button[aria-pressed="true"]{background:var(--seal-soft);color:var(--seal)}
+select{font:600 13px var(--font-body);color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:7px 10px;max-width:100%}
+label.chk{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--muted);cursor:pointer}
+.card{background:var(--card);border:2px solid var(--line);border-radius:24px;padding:18px;display:grid;gap:12px;box-shadow:0 6px 0 var(--line)}
+.meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--muted)}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:2px 9px;font-size:12px;font-weight:600;color:var(--muted);background:var(--paper)}
+.pill.dir{border-color:var(--seal);color:var(--seal);background:var(--seal-soft)}
+.pill.ok{border-color:var(--jade);color:var(--jade);background:var(--jade-soft)}
+.pill.mid{border-color:var(--amber);color:var(--amber);background:var(--amber-soft)}
+.pill.bad{border-color:var(--seal);color:var(--seal);background:var(--seal-soft)}
+.count{margin-left:auto;font-variant-numeric:tabular-nums}
+.src{font-size:17px;line-height:1.75}
+.src.zh{font-family:var(--font-zh);font-weight:500;font-size:19px;line-height:1.9}
+.src{background:var(--seal-soft);border-radius:16px;padding:12px 14px}
+.note{font-size:13px;color:var(--amber);background:var(--amber-soft);border-radius:14px;padding:8px 10px}
+textarea,input[type=text]{width:100%;font:500 16px/1.6 var(--font-body);color:var(--ink);background:var(--card);border:2px dashed var(--line);border-radius:16px;padding:10px 12px;resize:vertical}
+textarea.zhin{font-family:var(--font-zh-sans)}
+textarea{min-height:110px}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+button.btn{font:700 14px var(--font-body);border-radius:999px;padding:10px 16px;cursor:pointer;border:1.5px solid var(--line);background:var(--card);color:var(--ink);transition:transform .12s}
+button.btn:active{transform:translateY(2px)}
+button.btn.primary{background:var(--seal);border-color:var(--seal);color:#fff;box-shadow:0 3px 0 #d63d7a}
+button.btn.ghost{background:transparent}
+button.btn:disabled{opacity:.5;cursor:not-allowed}
+.spacer{flex:1}
+.result{display:grid;gap:12px;border-top:1px dashed var(--line);padding-top:14px}
+.verdict{display:flex;gap:14px;align-items:center}
+.stamp{flex:none;width:72px;height:72px;border-radius:50%;border:3px dashed var(--seal);background:var(--seal-soft);color:var(--seal);display:grid;place-items:center;transform:rotate(-8deg);font:700 24px/1 var(--font-body);font-variant-numeric:tabular-nums;position:relative}
+.stamp small{display:block;font-size:10px;font-weight:600;margin-top:2px;text-align:center}
+.stamp.ok{border-color:var(--jade);color:var(--jade)}
+.stamp.mid{border-color:var(--amber);color:var(--amber)}
+.verdict p{margin:0}
+h3{margin:0;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.errs{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.errs li{border-left:4px solid var(--seal);border-radius:4px;padding:4px 0 4px 10px;font-size:14px}
+.errs .from{text-decoration:line-through;color:var(--seal)}
+.errs .to{color:var(--jade);font-weight:600}
+.ref{background:var(--paper);border-radius:16px;padding:10px 12px;font-size:15px}
+.ref.zh{font-family:var(--font-zh-sans)}
+.muted{color:var(--muted);font-size:13px}
+.words{display:flex;flex-wrap:wrap;gap:6px}
+.words span{background:var(--seal-soft);border:1.5px solid var(--line);border-radius:999px;padding:3px 8px;font-size:13px}
+.banner{font-size:13px;border-radius:16px;padding:10px 12px;background:var(--amber-soft);color:var(--amber)}
+.chat{display:grid;gap:8px}
+.answer{font-size:14px;background:var(--paper);border-radius:16px;padding:10px 12px;white-space:pre-wrap}
+.loading{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:14px}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--seal);animation:pulse 1s infinite ease-in-out}
+@keyframes pulse{50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.dot{animation:none}}
+/* flashcards */
+.flash{min-height:190px;display:grid;place-items:center;text-align:center;cursor:pointer;user-select:none}
+.flash .face{font-family:var(--font-zh);font-size:30px;font-weight:700;line-height:1.4;color:var(--seal)}
+.flash .face.vi{font-family:var(--font-body);font-size:22px;font-weight:600}
+.flash .back{display:grid;gap:6px}
+.flash .alt{font-family:var(--font-zh-sans);color:var(--muted);font-size:15px}
+.hint{font-size:12px;color:var(--muted)}
+.opts{display:grid;gap:8px}
+.opts button{text-align:left;font:600 15px var(--font-body);padding:12px 16px;border-radius:18px;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.opts button.zhopt{font-family:var(--font-zh-sans)}
+.opts button.right{border-color:var(--jade);background:var(--jade-soft);color:var(--jade)}
+.opts button.wrong{border-color:var(--seal);background:var(--seal-soft);color:var(--seal)}
+.bar{height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--seal);width:0}
+/* structures */
+.pat{font-family:var(--font-zh);font-size:20px;font-weight:700;color:var(--seal)}
+.list{display:grid;gap:10px}
+.sitem{display:grid;gap:4px;padding:14px 16px;background:var(--card);border:2px solid var(--line);border-radius:20px}
+.sitem .ex{font-family:var(--font-zh-sans);font-size:14px}
+.sitem .exvi{font-size:13px;color:var(--muted)}
+.cloze{font-family:var(--font-zh);background:var(--seal-soft);border-radius:16px;padding:12px 14px;font-size:19px;line-height:1.9}
+.cloze b{color:var(--seal);border-bottom:2px solid var(--seal);padding:0 4px}
+details summary{cursor:pointer;font-weight:700;font-size:14px;color:var(--seal)}
+mark{background:var(--seal-soft);color:var(--seal);border-radius:6px;padding:0 3px;font-weight:700}
+.inSent{font-family:var(--font-zh-sans);font-size:14px;line-height:1.8;background:var(--paper);border-radius:14px;padding:8px 12px;text-align:left}
+.kv{display:grid;gap:6px;margin-top:8px}
+.kv div{font-size:14px}
+.kv b{font-family:var(--font-zh-sans);color:var(--seal)}
+@media (max-width:420px){.src.zh{font-size:18px}.flash .face{font-size:26px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1><span>合同</span>Luyện dịch hợp đồng<i aria-hidden="true">♡</i></h1>
+    <p class="sub">Biên dịch nâng cao · ôn giữa kì · từ mới và cấu trúc lấy ngay trong các câu dịch</p>
+    <div class="stats" id="stats"></div>
+  </header>
+  <nav class="tabs" aria-label="Chế độ luyện">
+    <a href="#dich" data-view="dich">Dịch câu</a>
+    <a href="#tu-vung" data-view="tu-vung">Từ vựng</a>
+    <a href="#cau-truc" data-view="cau-truc">Cấu trúc</a>
+  </nav>
+
+  <!-- DỊCH CÂU -->
+  <section class="view" id="v-dich" aria-label="Dịch câu">
+    <div class="banner" id="aiBanner" hidden></div>
+    <div class="filters">
+      <div class="seg" role="group" aria-label="Chiều dịch" id="dirSeg">
+        <button type="button" data-dir="all" aria-pressed="true">Tất cả</button>
+        <button type="button" data-dir="zh-vi" aria-pressed="false">Trung → Việt</button>
+        <button type="button" data-dir="vi-zh" aria-pressed="false">Việt → Trung</button>
+      </div>
+      <select id="tagSel" aria-label="Điều khoản"></select>
+      <label class="chk"><input type="checkbox" id="undoneOnly"> Chỉ câu chưa chấm</label>
+    </div>
+    <article class="card" id="sCard"></article>
+  </section>
+
+  <!-- TỪ VỰNG -->
+  <section class="view" id="v-tu-vung" aria-label="Từ vựng">
+    <div class="filters">
+      <div class="seg" role="group" aria-label="Kiểu ôn" id="vModeSeg">
+        <button type="button" data-mode="flash" aria-pressed="true">Thẻ ghi nhớ</button>
+        <button type="button" data-mode="quiz" aria-pressed="false">Trắc nghiệm</button>
+      </div>
+      <select id="setSel" aria-label="Bộ từ"></select>
+      <div class="seg" role="group" aria-label="Mặt trước" id="faceSeg">
+        <button type="button" data-face="zh" aria-pressed="true">中 → Việt</button>
+        <button type="button" data-face="vi" aria-pressed="false">Việt → 中</button>
+      </div>
+    </div>
+    <div id="vocabBox"></div>
+  </section>
+
+  <!-- CẤU TRÚC -->
+  <section class="view" id="v-cau-truc" aria-label="Cấu trúc">
+    <div class="filters">
+      <div class="seg" role="group" aria-label="Kiểu luyện" id="sModeSeg">
+        <button type="button" data-mode="cloze" aria-pressed="true">Điền cấu trúc</button>
+        <button type="button" data-mode="make" aria-pressed="false">Tự đặt câu</button>
+        <button type="button" data-mode="list" aria-pressed="false">Bảng tra</button>
+      </div>
+    </div>
+    <div id="structBox"></div>
+  </section>
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const SENTS = [
+ {dir:"zh-vi",tag:"Mở đầu",doc:"买卖合同",src:"甲、乙双方根据《中华人民共和国合同法》等有关法律规定，在平等、自愿的基础上，经充分协商，就乙方购买甲方产品相关事宜达成以下买卖合同条款。",ref:"Căn cứ “Luật Hợp đồng nước Cộng hòa Nhân dân Trung Hoa” và các quy định pháp luật có liên quan, trên cơ sở bình đẳng, tự nguyện, sau khi thỏa thuận đầy đủ, hai bên A và B thống nhất ký kết hợp đồng mua bán với các điều khoản dưới đây về việc bên B mua sản phẩm của bên A."},
+ {dir:"zh-vi",tag:"Chất lượng – khiếu nại",doc:"买卖合同",src:"乙方对产品质量有异议的，应当在收到产品后五日内提出确有证据的书面异议并通知到甲方；逾期不提出异议的，视为甲方产品质量符合本合同约定要求。",ref:"Trường hợp bên B có khiếu nại về chất lượng sản phẩm, bên B phải đưa ra khiếu nại bằng văn bản kèm chứng cứ xác thực và thông báo cho bên A trong vòng 5 ngày kể từ khi nhận được sản phẩm; quá thời hạn mà không khiếu nại thì được coi là chất lượng sản phẩm của bên A đã đáp ứng các yêu cầu thỏa thuận trong hợp đồng."},
+ {dir:"zh-vi",tag:"Chất lượng – khiếu nại",doc:"买卖合同",src:"但乙方使用甲方产品的，不受上述期限限制，视为甲方产品符合合同约定要求。",ref:"Tuy nhiên, nếu bên B đã sử dụng sản phẩm của bên A thì không bị giới hạn bởi thời hạn nêu trên, được coi là sản phẩm của bên A đã đáp ứng yêu cầu thỏa thuận trong hợp đồng."},
+ {dir:"zh-vi",tag:"Giá – chi phí",doc:"买卖合同",src:"甲方产品的包装费用、运输费用、保险费用及交付时的上下力支费用等按下列约定承担。",ref:"Chi phí đóng gói, chi phí vận chuyển, chi phí bảo hiểm sản phẩm của bên A và chi phí nhân công bốc xếp tại thời điểm bàn giao sẽ do các bên chi trả theo các thỏa thuận dưới đây."},
+ {dir:"zh-vi",tag:"Thanh toán",doc:"买卖合同",src:"乙方承担的上述费用，乙方应当在甲方交货前一次性给付甲方。",ref:"Đối với các chi phí nêu trên do bên B chịu, bên B có nghĩa vụ thanh toán một lần cho bên A trước khi bên A giao hàng."},
+ {dir:"zh-vi",tag:"Giao hàng – rủi ro",doc:"买卖合同",src:"产品交付地点为甲方所在地，交货时间为合同生效后___天。",ref:"Địa điểm bàn giao sản phẩm là nơi bên A đặt trụ sở, thời gian giao hàng là ___ ngày sau khi hợp đồng có hiệu lực."},
+ {dir:"zh-vi",tag:"Giao hàng – rủi ro",doc:"买卖合同",src:"乙方未能按约定付款的，甲方有权拒绝交货；乙方未能及时提供相应文件的，甲方有权延期交货。",ref:"Trường hợp bên B không thanh toán theo đúng thỏa thuận, bên A có quyền từ chối giao hàng; trường hợp bên B không kịp thời cung cấp các tài liệu tương ứng, bên A có quyền gia hạn thời gian giao hàng."},
+ {dir:"zh-vi",tag:"Giao hàng – rủi ro",doc:"买卖合同",src:"产品交付后或乙方违约致使甲方拒绝交货、延期交货的，产品的灭失、毁损的风险由乙方承担。",ref:"Sau khi sản phẩm được bàn giao, hoặc khi bên B vi phạm hợp đồng dẫn đến việc bên A từ chối giao hàng, gia hạn giao hàng, thì rủi ro mất mát, hư hỏng sản phẩm do bên B chịu."},
+ {dir:"zh-vi",tag:"Thanh toán",doc:"买卖合同",src:"乙方应当以现金、支票或即期银行承兑汇票方式支付甲方价款。",ref:"Bên B phải thanh toán tiền hàng cho bên A bằng tiền mặt, séc hoặc hối phiếu ngân hàng chấp nhận trả ngay."},
+ {dir:"zh-vi",tag:"Chấm dứt hợp đồng",doc:"买卖合同",src:"双方协商一致的，可以终止合同的履行。一方根本性违约的，另一方有权解除合同，但应当及时书面通知到对方。",ref:"Hai bên thống nhất thì có thể chấm dứt việc thực hiện hợp đồng. Trường hợp một bên vi phạm cơ bản hợp đồng, bên còn lại có quyền hủy bỏ hợp đồng nhưng phải kịp thời thông báo bằng văn bản cho bên kia."},
+ {dir:"zh-vi",tag:"Bảo mật",doc:"买卖合同",src:"非经甲方书面同意或为履行本合同义务之需要，乙方不得使用、披露甲方的商业秘密。",ref:"Trừ khi được bên A đồng ý bằng văn bản hoặc vì nhu cầu thực hiện nghĩa vụ của hợp đồng này, bên B không được sử dụng, tiết lộ bí mật kinh doanh của bên A."},
+ {dir:"zh-vi",tag:"Vi phạm – bồi thường",doc:"买卖合同",src:"若违约金不足以弥补守约方损失的，违约方应当赔偿给守约方造成的一切损失（包括直接损失、可得利益损失及主张权利的费用等）。",ref:"Trường hợp tiền phạt vi phạm không đủ để bù đắp tổn thất của bên tuân thủ hợp đồng, bên vi phạm phải bồi thường mọi tổn thất gây ra cho bên tuân thủ (bao gồm tổn thất trực tiếp, tổn thất lợi ích có thể đạt được và chi phí đòi quyền lợi, v.v.)."},
+ {dir:"zh-vi",tag:"Bất khả kháng",doc:"买卖合同",src:"因不可抗力终止合同履行的一方，应当于事件发生后___日内向对方提供有权部门出具的发生不可抗力事件的证明文件并及时通知对方。",ref:"Bên chấm dứt thực hiện hợp đồng do bất khả kháng phải cung cấp cho bên kia tài liệu chứng minh sự kiện bất khả kháng do cơ quan có thẩm quyền cấp trong thời hạn ___ ngày kể từ ngày xảy ra sự kiện, đồng thời thông báo kịp thời cho bên kia."},
+ {dir:"zh-vi",tag:"Điều khoản khác",doc:"买卖合同",src:"乙方联系人或授权代表在履行合同过程中对甲方所作的任何承诺、通知等，都对乙方具有约束力，具有不可撤销性。",ref:"Mọi cam kết, thông báo do người liên hệ hoặc đại diện được ủy quyền của bên B đưa ra với bên A trong quá trình thực hiện hợp đồng đều có tính ràng buộc đối với bên B và không thể hủy ngang."},
+ {dir:"zh-vi",tag:"Tiền thuê – đặt cọc",doc:"租赁合同 (练习 1)",src:"乙方如逾期支付租金，每逾期一天，则乙方需按月租金的0.2%支付滞纳金；欠交租金超过七天，视同违约，甲方有权收回房屋，并由乙方承担一切违约责任。",ref:"Nếu bên B chậm thanh toán tiền thuê, mỗi ngày quá hạn bên B phải trả tiền phạt chậm nộp bằng 0,2% tiền thuê tháng; nợ tiền thuê quá 7 ngày được coi là vi phạm hợp đồng, bên A có quyền thu hồi nhà và bên B phải chịu mọi trách nhiệm vi phạm hợp đồng."},
+ {dir:"zh-vi",tag:"Tiền thuê – đặt cọc",doc:"租赁合同 (练习 1)",src:"签约时，承租人须支付相当于___个月房租的押金。该押金不得冲抵房款。",ref:"Khi ký hợp đồng, bên thuê phải trả một khoản tiền cọc tương đương ___ tháng tiền thuê. Khoản tiền cọc này không được trừ vào tiền thuê."},
+ {dir:"zh-vi",tag:"Tiền thuê – đặt cọc",doc:"租赁合同 (练习 1)",src:"在合同到期或解约后，甲方在乙方不拖欠任何费用和保持室内设施完好的情况下即返还押金。",ref:"Sau khi hợp đồng hết hạn hoặc chấm dứt, nếu bên B không nợ đọng bất kỳ khoản phí nào và giữ trang thiết bị trong phòng nguyên vẹn, bên A sẽ hoàn trả tiền cọc ngay."},
+ {dir:"zh-vi",tag:"Chấm dứt hợp đồng",doc:"租赁合同 (练习 1)",src:"在租赁合同期内，甲乙双方任何一方未经对方同意中途擅自解除合同的，应向对方支付一个月的房租作为违约金。",ref:"Trong thời hạn hợp đồng, bên nào chưa được sự đồng ý của bên kia mà tự ý chấm dứt hợp đồng giữa chừng thì phải trả cho bên kia khoản tiền phạt vi phạm tương đương một tháng tiền thuê."},
+ {dir:"zh-vi",tag:"Thời hạn – gia hạn",doc:"租赁合同 (练习 1)",src:"本合同期满时，乙方有优先续租权，但须提前30天给予甲方书面通知，取得甲方的同意，并签订续租合同。",ref:"Khi hợp đồng này hết hạn, bên B có quyền ưu tiên thuê tiếp, nhưng phải thông báo bằng văn bản cho bên A trước 30 ngày, được bên A đồng ý và ký hợp đồng gia hạn."},
+ {dir:"zh-vi",tag:"Bất khả kháng",doc:"租赁合同 (练习 1)",src:"因洪水、地震、或政府拆迁、征用等不可抗力原因，造成双方不得不中止合同，双方不承担违约责任，按实际天数计算房租。",ref:"Do các nguyên nhân bất khả kháng như lũ lụt, động đất hoặc nhà nước giải tỏa, trưng dụng… khiến hai bên buộc phải tạm dừng hợp đồng, hai bên không phải chịu trách nhiệm vi phạm hợp đồng, tiền thuê được tính theo số ngày thực tế."},
+ {dir:"zh-vi",tag:"Quyền và nghĩa vụ",doc:"租赁合同 (练习 1)",src:"未经甲方书面同意，乙方不得将出租房屋转租、分租、转让、转借、联营、入股、抵押或与他人调剂交换使用，否则甲方有权终止合同并没收押金。",ref:"Khi chưa được bên A đồng ý bằng văn bản, bên B không được cho thuê lại toàn bộ hoặc một phần, chuyển nhượng, cho mượn, liên doanh, góp vốn, thế chấp hoặc hoán đổi quyền sử dụng nhà cho thuê với người khác; nếu vi phạm, bên A có quyền chấm dứt hợp đồng và không hoàn lại tiền cọc."},
+ {dir:"zh-vi",tag:"Quyền và nghĩa vụ",doc:"租赁合同 (练习 1)",src:"因乙方使用不当，房屋及其内的设施出现损坏，乙方应及时联络管理机构进行维修，并负担有关维修费用。若乙方拒不维修或赔偿，甲方有权代为维修，维修所需费用由乙方承担。",ref:"Nếu căn nhà và thiết bị bên trong bị hư hỏng do bên B sử dụng không đúng cách, bên B phải kịp thời liên hệ ban quản lý để sửa chữa và chịu chi phí sửa chữa liên quan. Nếu bên B từ chối sửa chữa hoặc bồi thường, bên A có quyền sửa chữa thay, chi phí sửa chữa do bên B chịu."},
+ {dir:"zh-vi",tag:"Quyền và nghĩa vụ",doc:"租赁合同 (练习 1)",src:"双方解约时，乙方不能移走自行添加的结构性设施，甲方亦不必对上述添加设施进行补偿。",ref:"Khi hai bên chấm dứt hợp đồng, bên B không được tháo dỡ, di dời các hạng mục mang tính kết cấu do mình tự lắp đặt, và bên A cũng không phải bồi hoàn cho các hạng mục lắp đặt nêu trên."},
+ {dir:"zh-vi",tag:"Quyền và nghĩa vụ",doc:"租赁合同 (练习 1)",src:"乙方须做好安全及防火工作，不得在房屋内外存储或排放有害、腐蚀性或污臭物质，严禁存储易燃、易爆品。",ref:"Bên B có trách nhiệm bảo đảm an toàn và phòng cháy chữa cháy; không được lưu trữ hoặc xả thải các chất độc hại, ăn mòn hoặc gây mùi hôi thối bên trong và bên ngoài căn nhà; nghiêm cấm tàng trữ các chất dễ cháy, dễ nổ."},
+ {dir:"zh-vi",tag:"Thời hạn – gia hạn",doc:"租赁合同 (练习 1)",src:"若乙方逾期不迁离或不归还出租房屋，则甲方有权采取有效措施收回出租房屋并另行处理。",ref:"Nếu bên B quá hạn mà không dọn đi hoặc không hoàn trả căn nhà, bên A có quyền áp dụng các biện pháp cần thiết để thu hồi nhà và tự xử lý."},
+ {dir:"zh-vi",tag:"Hiệu lực – số bản",doc:"租赁合同 (练习 1)",src:"本合同为中英文版本，中英文具有同等效力。发生争议，以中文为最终解释。本合同自出租人收到首期房租和押金后生效。",ref:"Hợp đồng này được lập bằng tiếng Trung và tiếng Anh, hai bản có hiệu lực ngang nhau. Nếu phát sinh tranh chấp, bản tiếng Trung là căn cứ giải thích cuối cùng. Hợp đồng có hiệu lực kể từ khi bên cho thuê nhận đủ tiền thuê kỳ đầu và tiền đặt cọc."},
+ {dir:"zh-vi",tag:"Quyền và nghĩa vụ",doc:"房屋租赁合同协议书",src:"如需转让或抵押房屋，甲方应提前三个月通知乙方并保证本合同继续履行；甲方如出卖该房屋，在同等条件下，乙方享有优先购买权。",ref:"Nếu cần chuyển nhượng hoặc thế chấp nhà, bên A phải thông báo cho bên B trước ba tháng và bảo đảm hợp đồng này tiếp tục được thực hiện; nếu bên A bán ngôi nhà, trong điều kiện ngang nhau, bên B được hưởng quyền ưu tiên mua."},
+ {dir:"zh-vi",tag:"Tranh chấp",doc:"房屋租赁合同协议书",src:"双方如在本合同履行中发生争议，可向房屋租赁管理部门申请调解，调解不成，向人民法院起诉。",ref:"Nếu phát sinh tranh chấp trong quá trình thực hiện hợp đồng, hai bên có thể đề nghị cơ quan quản lý thuê nhà hòa giải; hòa giải không thành thì khởi kiện ra Tòa án nhân dân."},
+ {dir:"vi-zh",tag:"Hàng hóa – giá",doc:"HĐ mua bán ĐH Tây Nguyên",src:"Bên B cung cấp và lắp đặt cho Bên A một số thiết bị với số lượng, chi tiết cấu hình và giá cả như sau:",ref:"乙方为甲方提供并安装部分设备，数量、配置详情及价格如下："},
+ {dir:"vi-zh",tag:"Giá – chi phí",doc:"HĐ mua bán ĐH Tây Nguyên",src:"Giá trên đã bao gồm thuế GTGT, chi phí vận chuyển, lắp đặt và các chi phí khác.",ref:"上述价格已包含增值税、运输费、安装费及其他费用。"},
+ {dir:"vi-zh",tag:"Thanh toán",doc:"HĐ mua bán ĐH Tây Nguyên",src:"Bên B phải cung cấp hóa đơn tài chính cho Bên A sau khi Bên A đã xác nhận đầy đủ việc giao nhận hàng hóa theo hợp đồng.",ref:"在甲方完全确认按合同完成货物交接后，乙方必须向甲方提供财务发票。",note:"Hợp đồng này: bên A là bên mua (trường), bên B là bên bán."},
+ {dir:"vi-zh",tag:"Bất khả kháng",doc:"HĐ mua bán ĐH Tây Nguyên",src:"Trong những trường hợp bất khả kháng Bên B không phải chịu trách nhiệm về việc giao hàng chậm, nhưng phải thông báo ngay cho Bên A bằng điện thoại hoặc bằng Fax trong vòng 01 ngày.",ref:"在不可抗力情况下，乙方对延迟交货不承担责任，但必须在01天内通过电话或传真立即通知甲方。"},
+ {dir:"vi-zh",tag:"Thanh lý hợp đồng",doc:"HĐ mua bán ĐH Tây Nguyên",src:"Sau khi Bên B đã hoàn thành trách nhiệm với Bên A và Bên A thanh toán đúng và đủ tiền cho Bên B theo quy định tại Điều 04, hợp đồng này xem như đã được thanh lý.",ref:"在乙方完成对甲方的责任并且甲方按照第四条规定向乙方足额、准确支付款项后，本合同视为已清算。"},
+ {dir:"vi-zh",tag:"Điều khoản khác",doc:"HĐ mua bán ĐH Tây Nguyên",src:"Hai Bên cam kết thực hiện nghiêm túc các điều khoản đã thỏa thuận trên, không được đơn phương thay đổi hoặc đơn phương chấm dứt hợp đồng.",ref:"双方承诺严格履行上述约定的条款，不得单方面更改或单方面终止合同。"},
+ {dir:"vi-zh",tag:"Hiệu lực – số bản",doc:"HĐ mua bán ĐH Tây Nguyên",src:"Hợp đồng có hiệu lực sau khi cả hai bên cùng ký. Hợp đồng này được lập thành 05 bản có giá trị pháp lý như nhau, Bên A giữ 04 bản, Bên B giữ 01 bản.",ref:"本合同在双方签字后生效。本合同一式05份，具有同等法律效力，甲方保留04份，乙方保留01份。"},
+ {dir:"vi-zh",tag:"Tiền thuê – đặt cọc",doc:"HĐ thuê nhà 2013",src:"Giá thuê là 7.000.000 đồng (Bảy triệu đồng chẵn). Sau 1 năm, giá thuê có thể thay đổi nhưng không quá 15% giá hiện tại.",ref:"租金为7,000,000越南盾（大写：柒佰万越南盾整）。一年后，租金可调整，但不得超过当前租金的15%。"},
+ {dir:"vi-zh",tag:"Tiền thuê – đặt cọc",doc:"HĐ thuê nhà 2013",src:"Tiền thuê nhà được thanh toán 06 tháng 1 lần và thanh toán lần đầu sau khi kí hợp đồng này.",ref:"租金每六个月支付一次，首期租金于签订本合同后支付。"},
+ {dir:"vi-zh",tag:"Tiền thuê – đặt cọc",doc:"HĐ thuê nhà 2013",src:"Số tiền này sẽ được hoàn trả bên thuê khi hết hạn hợp đồng với điều kiện bên B giao lại ngôi nhà đúng hiện trạng ban đầu và đã thanh toán xong các khoản phí dịch vụ.",ref:"合同期满时，乙方付清所有服务费用并将房屋按原状归还甲方后，甲方立即向乙方退还押金。"},
+ {dir:"vi-zh",tag:"Quyền và nghĩa vụ",doc:"HĐ thuê nhà 2013",src:"Trong thời hạn hợp đồng, bên A có quyền chuyển hoặc thế chấp nhà nêu trên nhưng phải đảm bảo cho bên B vẫn được tiếp tục hợp đồng cho đến hết thời hạn thuê.",ref:"合同期限内，甲方有权转让或抵押上述房屋，但必须保证乙方可继续履行合同至租期届满。"},
+ {dir:"vi-zh",tag:"Quyền và nghĩa vụ",doc:"HĐ thuê nhà 2013",src:"Không được cho người khác thuê lại ngôi nhà nếu không được bên A đồng ý bằng văn bản.",ref:"未经甲方书面同意，乙方不得将房屋转租给他人。"},
+ {dir:"vi-zh",tag:"Quyền và nghĩa vụ",doc:"HĐ thuê nhà 2013",src:"Không được tự ý thay đổi cấu trúc của căn nhà, nếu cần lắp đặt thêm thiết bị thì phải được sự đồng ý bằng văn bản của bên cho thuê.",ref:"不得擅自改变房屋结构；如需加装设备，须经出租方书面同意。"},
+ {dir:"vi-zh",tag:"Chấm dứt hợp đồng",doc:"HĐ thuê nhà 2013",src:"Trong thời hạn hợp đồng nếu một bên phát hiện bên kia có hành vi vi phạm hợp đồng và có căn cứ về việc vi phạm đó thì phải thông báo bằng văn bản cho bên vi phạm biết và yêu cầu khắc phục các vi phạm đó.",ref:"合同期限内，一方发现另一方有违约行为并有相关依据的，应当书面通知违约方，并要求其纠正违约行为。"},
+ {dir:"vi-zh",tag:"Chấm dứt hợp đồng",doc:"HĐ thuê nhà 2013",src:"Bên nào tự ý chấm dứt hợp đồng trước thời hạn sẽ chịu phạt số tiền tương đương 1 tháng tiền thuê nhà cho bên kia.",ref:"擅自提前终止合同的一方，应向对方支付相当于一个月租金的违约金。"},
+ {dir:"vi-zh",tag:"Thời hạn – gia hạn",doc:"HĐ thuê nhà 2013",src:"Nếu hết thời hạn cho thuê 1 trong 2 bên không có ý kiến gì thì hợp đồng được gia hạn thêm 12 tháng cho mỗi lần tiếp theo.",ref:"租赁期满时，如双方均无异议，本合同自动续期12个月，以后依此类推。"},
+ {dir:"vi-zh",tag:"Giao hàng – rủi ro",doc:"HĐ bán hàng cao su (练习 2)",src:"Nếu theo điều kiện FOB, buộc phải có B/L chủ và người giao hàng phải ghi rõ: theo chỉ định.",ref:"若按FOB（离岸价）条件成交，必须提供主提单，且发货人须在提单上注明“按指定交付”。"},
+ {dir:"vi-zh",tag:"Thanh toán",doc:"HĐ bán hàng cao su (练习 2)",src:"LC trả ngay phải được mở chậm nhất ngày 19/7/2011. Loại tiền tệ: Đô la Mỹ. Chứng từ của bên thứ ba được chấp nhận.",ref:"即期信用证须最迟于2011年7月19日开立。币种：美元。允许第三方的单据。"},
+ {dir:"vi-zh",tag:"Bất khả kháng",doc:"HĐ bán hàng cao su (练习 2)",src:"Nếu những sự kiện bất khả kháng kéo dài hơn 1 tháng, các bên có quyền chấm dứt hợp đồng này.",ref:"若不可抗力事件持续超过一个月，双方均有权解除本合同。"},
+ {dir:"vi-zh",tag:"Chất lượng – khiếu nại",doc:"HĐ bán hàng cao su (练习 2)",src:"Bên bán không phải chịu bất kỳ trách nhiệm gì đối với những thiệt hại hoặc mất mát do những nguyên nhân tự nhiên hoặc thuộc phạm vi trách nhiệm của Người vận tải hoặc Người bảo hiểm.",ref:"对于因自然因素造成的损坏，以及属于承运人或保险人责任范围内的损失，卖方不承担任何责任。"},
+ {dir:"vi-zh",tag:"Tranh chấp",doc:"HĐ bán hàng cao su (练习 2)",src:"Phán quyết của Hội đồng trọng tài là phán quyết cuối cùng và có hiệu lực với cả hai bên. Chi phí trọng tài sẽ do bên thua kiện chịu trừ trường hợp có quy định khác.",ref:"仲裁庭的裁决为最终裁决，对双方均有法律约束力。除非另有规定，仲裁费用由败诉方承担。"},
+ {dir:"vi-zh",tag:"Hiệu lực – số bản",doc:"HĐ bán hàng cao su (练习 2)",src:"Hợp đồng này có hiệu lực kể từ thời điểm đại diện hai bên ký. Bản fax hoặc scan của Hợp đồng này cũng có giá trị như bản chính.",ref:"本合同自双方代表签字之日起生效。本合同的传真件或扫描件与原件具有同等法律效力。"},
+ {dir:"vi-zh",tag:"Thanh toán",doc:"HĐ thuê nhà Văn Khê 2018",src:"Sau 6 tháng đầu, nếu bên A đồng ý thanh toán tất cả số tiền các tháng còn lại (30 tháng) thì số tiền thuê vẫn giữ nguyên 15.000.000 VNĐ/tháng.",ref:"6个月过后，若甲方同意一次性支付剩余30个月的全部款项，则租金保持不变，即15,000,000越南盾/月。",note:"Hợp đồng này: bên A là BÊN THUÊ (承租方), bên B là bên cho thuê."},
+ {dir:"vi-zh",tag:"Quyền và nghĩa vụ",doc:"HĐ thuê nhà Văn Khê 2018",src:"Không được cơi nới, sửa chữa ngôi nhà nếu không có sự đồng ý của bên B.",ref:"未经乙方同意，甲方不得扩建或改建出租屋。",note:"Hợp đồng này: bên A là BÊN THUÊ (承租方), bên B là bên cho thuê."},
+ {dir:"vi-zh",tag:"Quyền và nghĩa vụ",doc:"HĐ thuê nhà Văn Khê 2018",src:"Bàn giao toàn bộ quyền sử dụng mặt bằng thuê cho bên A sau khi nhận được tiền thanh toán của kỳ đầu tiên.",ref:"在收到首期款项后，乙方将出租房屋的全部使用权交付甲方。",note:"Hợp đồng này: bên A là BÊN THUÊ (承租方), bên B là bên cho thuê."},
+ {dir:"vi-zh",tag:"Tranh chấp",doc:"HĐ thuê nhà Văn Khê 2018",src:"Trong quá trình thực hiện hợp đồng, nếu có vướng mắc phát sinh, hai bên cùng chủ động thông báo cho nhau biết và cùng bàn bạc để giải quyết trên cơ sở thương lượng để đảm bảo hai bên cùng có lợi.",ref:"在履行本合同过程中如发生任何问题，双方应互相通报，并本着互利的原则友好协商解决。"},
+ {dir:"vi-zh",tag:"Hiệu lực – số bản",doc:"HĐ thuê nhà Văn Khê 2018",src:"Hợp đồng này lập thành 4 bản, trong đó có 2 bản tiếng Việt, 2 bản tiếng Trung và đều có giá trị pháp lý như nhau. Mỗi bên giữ 2 bản (1 bản tiếng Việt, 1 bản tiếng Trung).",ref:"本合同一式四份，越文版本和中文版本各两份，具有同等法律效力。双方各执一份越文版本和一份中文版本。"},
+ {dir:"zh-vi",tag:"Bất khả kháng",doc:"买卖合同",src:"因火灾、战争、罢工、自然灾害等不可抗力因素而致本合同不能履行的，双方终止合同的履行，各自的损失各自承担。",ref:"Do các yếu tố bất khả kháng như hỏa hoạn, chiến tranh, đình công, thiên tai… dẫn đến hợp đồng này không thể thực hiện được, hai bên chấm dứt việc thực hiện hợp đồng, tổn thất của bên nào bên nấy tự chịu."},
+ {dir:"zh-vi",tag:"Bảo mật",doc:"买卖合同",src:"无论何种原因终止、解除本合同的，乙方同意对在签订和履行本合同中知悉的甲方的商业秘密承担保密义务。",ref:"Dù hợp đồng này bị chấm dứt hoặc hủy bỏ vì bất kỳ lý do gì, bên B đồng ý chịu nghĩa vụ bảo mật đối với bí mật kinh doanh của bên A mà mình biết được trong quá trình ký kết và thực hiện hợp đồng."},
+ {dir:"zh-vi",tag:"Tiền thuê – đặt cọc",doc:"租赁合同 (练习 1)",src:"乙方应按时支付因租用该出租房屋而产生的有关费用，包括：水费、电费、煤气费、暖气费、存车费、电话费和有线电视收视费、物业管理费、发票税金等费用。",ref:"Bên B phải thanh toán đúng hạn các khoản chi phí liên quan phát sinh từ việc thuê nhà, bao gồm: tiền nước, tiền điện, tiền gas, tiền sưởi ấm, tiền gửi xe, tiền điện thoại và cước truyền hình cáp, phí quản lý tòa nhà, thuế xuất hóa đơn và các khoản phí khác."},
+ {dir:"zh-vi",tag:"Quyền và nghĩa vụ",doc:"租赁合同 (练习 1)",src:"租赁期内，乙方对出租房屋进行装修或增加设施须征得甲方同意并经政府有关部门批准，并由甲方执行监理，所需费用由乙方承担。",ref:"Trong thời gian thuê, bên B cải tạo, trang trí hoặc bổ sung thiết bị trong căn nhà phải được sự đồng ý của bên A và được cơ quan nhà nước có thẩm quyền phê duyệt; bên A thực hiện giám sát thi công, mọi chi phí phát sinh do bên B chi trả."},
+ {dir:"zh-vi",tag:"Tiền thuê – đặt cọc",doc:"租赁合同 (练习 1)",src:"乙方在付清押金、首期租金后即可入住。",ref:"Sau khi bên B thanh toán đầy đủ tiền đặt cọc và tiền thuê kỳ đầu tiên thì có thể nhận bàn giao và dọn vào ở."},
+ {dir:"zh-vi",tag:"Quyền và nghĩa vụ",doc:"房屋租赁合同协议书",src:"保证该房屋产权清楚，没有纠纷，若发生与甲方有关的产权纠纷或其他债务，概由甲方负责清理；给乙方造成损失的，甲方负责赔偿。",ref:"Bên A bảo đảm quyền sở hữu căn nhà rõ ràng, không có tranh chấp; nếu phát sinh tranh chấp quyền sở hữu hoặc các khoản nợ khác liên quan đến bên A thì bên A chịu trách nhiệm giải quyết toàn bộ; nếu gây thiệt hại cho bên B, bên A phải bồi thường."},
+ {dir:"zh-vi",tag:"Quyền và nghĩa vụ",doc:"房屋租赁合同协议书",src:"必须按合同约定的使用用途使用该房屋，如需改变用途，应征得甲方同意或签订补充协议，否则应当承担违约责任，并可解除合同。",ref:"Bên B phải sử dụng căn nhà đúng mục đích đã thỏa thuận trong hợp đồng; nếu cần thay đổi mục đích sử dụng thì phải được bên A đồng ý hoặc ký thỏa thuận bổ sung, nếu không sẽ phải chịu trách nhiệm vi phạm hợp đồng và hợp đồng có thể bị hủy bỏ."}
+].map((s,i)=>({...s,id:"s"+(i+1)}));
+
+const VOCAB_RAW = {
+ "Khung & các bên":[
+  "出卖人|bên bán (hợp đồng mua bán)","买受人|bên mua","出租人 / 出租方|bên cho thuê","承租人 / 承租方|bên thuê","以下简称甲方|gọi tắt là bên A","法定代表人|người đại diện theo pháp luật","委托代理人|người được ủy quyền","住所地|địa chỉ trụ sở","常住地址|địa chỉ thường trú","户籍所在地|nơi đăng ký hộ khẩu","税号|mã số thuế","开户行|ngân hàng mở tài khoản","合同编号|số hợp đồng","经充分协商|sau khi thỏa thuận đầy đủ","自愿、平等、互利|tự nguyện, bình đẳng, cùng có lợi","一式两份|lập thành hai bản","各执一份|mỗi bên giữ một bản","具有同等法律效力|có giá trị pháp lý như nhau","签字、盖章|ký, đóng dấu","生效|có hiệu lực","附件|phụ lục","不可分割的组成部分|phần không thể tách rời","未尽事宜|những vấn đề chưa được quy định","另行协商|thương lượng thêm (riêng)","第七条第一款|khoản 1 điều 7"],
+ "Mua bán":[
+  "型号|mã hàng, model","质量标准|tiêu chuẩn chất lượng","异议|khiếu nại, ý kiến phản đối","书面异议|khiếu nại bằng văn bản","符合约定要求|đáp ứng yêu cầu đã thỏa thuận","单价|đơn giá","总价款|tổng giá trị hợp đồng","含税价|giá đã bao gồm thuế","增值税|thuế giá trị gia tăng (GTGT)","大写|(số tiền) bằng chữ","包装物|vật liệu đóng gói, bao bì","上下力支费用|chi phí nhân công bốc xếp","装卸费|chi phí bốc dỡ","一次性给付|thanh toán một lần","乙方提货|bên B tự nhận hàng","甲方送货|bên A giao hàng","甲方代办托运|bên A gửi vận chuyển hộ","交货地点|địa điểm giao hàng","延期交货|gia hạn (hoãn) giao hàng","灭失、毁损|mất mát, hư hỏng","预付货款|trả trước tiền hàng","余款|số tiền còn lại","支票|séc","即期银行承兑汇票|hối phiếu ngân hàng chấp nhận trả ngay","即期信用证|thư tín dụng (L/C) trả ngay","银行转账|chuyển khoản","财务发票|hóa đơn tài chính","验收|nghiệm thu","保修卡|phiếu bảo hành","包干合同|hợp đồng trọn gói","合同清算|thanh lý hợp đồng","公吨|tấn mét (MT = 1.000 kg)","到岸价|giá CIF","离岸价|giá FOB","主提单|vận đơn chủ (B/L chủ)","允许分运交货|chấp nhận giao hàng từng phần","索赔|yêu cầu bồi thường","检验证书|chứng nhận giám định","承运人|người vận tải","目的港|cảng đến","违约方|bên vi phạm","守约方|bên tuân thủ hợp đồng","违约金|tiền phạt vi phạm","可得利益损失|tổn thất lợi ích có thể đạt được","根本性违约|vi phạm cơ bản","商业秘密|bí mật kinh doanh","披露|tiết lộ","不可抗力|bất khả kháng","罢工|đình công","过错方|bên có lỗi","不可撤销性|tính không thể hủy ngang","约束力|tính ràng buộc","仲裁|trọng tài","败诉方|bên thua kiện","裁决|phán quyết"],
+ "Thuê nhà":[
+  "租赁|thuê, cho thuê","租金|tiền thuê","押金|tiền đặt cọc","租期|thời hạn thuê","优先续租权|quyền ưu tiên thuê tiếp","优先购买权|quyền ưu tiên mua","转租|cho thuê lại","转让|chuyển nhượng","转借|cho mượn lại","抵押|thế chấp","擅自|tự ý","收回房屋|thu hồi nhà","代为维修|sửa chữa thay","自然损耗|hao mòn tự nhiên","装修|trang trí, sửa sang nội thất","改建|cải tạo","扩建|cơi nới","结构性设施|hạng mục mang tính kết cấu","承重构件|cấu kiện chịu lực","恢复原状|khôi phục nguyên trạng","补偿|bồi hoàn","迁离|dọn đi","产权纠纷|tranh chấp quyền sở hữu","拆迁|giải tỏa","征用|trưng dụng","调解|hòa giải","登记备案|đăng ký lưu hồ sơ","贬损房屋价值|làm giảm sút giá trị nhà","违禁物品|hàng cấm","治安秩序|an ninh trật tự","消防安全|phòng cháy chữa cháy","联排别墅|nhà liền kề","建筑面积|diện tích xây dựng","抽油烟机|máy hút mùi","热水器|bình nóng lạnh"],
+ "Bổ sung từ câu dịch":[
+  "合同法|Luật Hợp đồng","相关事宜|các vấn đề liên quan","协商一致|thống nhất qua thương lượng","履行|thực hiện (hợp đồng)","交付|bàn giao","所在地|nơi đặt trụ sở","合同生效|hợp đồng có hiệu lực","相应文件|tài liệu tương ứng","书面通知|thông báo bằng văn bản","弥补|bù đắp","直接损失|tổn thất trực tiếp","有权部门|cơ quan có thẩm quyền","证明文件|tài liệu chứng minh","授权代表|đại diện được ủy quyền","承诺|cam kết","返还押金|hoàn trả tiền cọc","管理机构|ban quản lý","腐蚀性|tính ăn mòn","采取有效措施|áp dụng biện pháp cần thiết","最终解释|căn cứ giải thích cuối cùng","同等条件|điều kiện ngang nhau","起诉|khởi kiện","人民法院|Tòa án nhân dân","设备|thiết bị","配置|cấu hình","安装|lắp đặt","交接|giao nhận","足额|đủ (số tiền)","严格履行|thực hiện nghiêm túc","单方面|đơn phương","延迟交货|giao hàng chậm","传真|fax","扫描件|bản scan","原件|bản chính","发货人|người giao hàng","币种|loại tiền tệ","单据|chứng từ","持续|kéo dài","保险人|người bảo hiểm","仲裁庭|hội đồng trọng tài","纠正|khắc phục","依据|căn cứ","自动续期|tự động gia hạn","依此类推|cứ thế tính tiếp","剩余|còn lại","使用权|quyền sử dụng","友好协商|thương lượng hữu nghị","越文版本|bản tiếng Việt","调剂交换使用|hoán đổi quyền sử dụng"],
+ "Từ bôi vàng":[
+  "物业|nhà cửa và tiện ích đi kèm|房屋及其附属设施","逾期|quá hạn|超过规定的期限","滞纳金|tiền phạt chậm thanh toán|逾期付款的违约金","视同|được coi như|当作、看作","不得|không được phép|不可以、不允许","解约|hủy bỏ / chấm dứt hợp đồng|解除合同、终止合同","即|ngay lập tức|立即、马上、就","未经|chưa được (đồng ý, phê duyệt)|没有经过、未得到","续租|gia hạn thuê|继续租赁、延长租期","亦|cũng|也","中止合同|tạm dừng thực hiện hợp đồng|暂时停止履行合同","没收|tịch thu, không hoàn lại|无偿收归拥有、强行收回","拒|từ chối, không chịu|拒绝、不肯","代为|làm thay|替别人去做、代替执行","监理|giám sát và quản lý|监督和管理","付清|thanh toán hết|全部付完、结清","首期|kỳ đầu tiên|第一期","即可|thì có thể|就可以","易燃、易爆品|chất dễ cháy, dễ nổ|容易燃烧和爆炸的物品","届满|đến hạn, hết hạn|到期、满期"],
+ "Từ bôi đỏ":[
+  "欠交租金|nợ tiền thuê","出具收据|xuất biên lai","期满|hết hạn, mãn hạn","中途|giữa chừng, trước thời hạn","冲抵房款|cấn trừ vào tiền thuê","擅自解除合同|tự ý chấm dứt hợp đồng","主张|yêu cầu thực hiện (quyền lợi)","分租|chia nhỏ để cho thuê lại","联营|liên doanh","入股|góp vốn cổ phần","终止合同|chấm dứt hợp đồng","物业管理费|phí quản lý tòa nhà","催促|đôn đốc, hối thúc","使用不当|sử dụng không đúng cách","非人为的火灾|hỏa hoạn không do con người gây ra","征得甲方同意|được sự đồng ý của bên A","任何用途|bất kỳ mục đích nào","另行处理|tự xử lý, xử lý theo cách khác","见证方|bên làm chứng","不拖欠|không nợ đọng"]
+};
+const VOCAB = [];
+Object.entries(VOCAB_RAW).forEach(([set,arr])=>arr.forEach(l=>{const [zh,vi,alt]=l.split("|");VOCAB.push({set,zh,vi,alt:alt||""});}));
+
+const STRUCTS = [
+ {pat:"未经…书面同意，…不得…",vi:"Chưa được … đồng ý bằng văn bản thì không được…",ex:"未经甲方书面同意，乙方不得将房屋转租给第三方。",exvi:"Chưa được bên A đồng ý bằng văn bản, bên B không được cho bên thứ ba thuê lại nhà.",ans:"未经",opts:["未经","经过","除非","无论"]},
+ {pat:"非经…或…",vi:"Trừ khi được … (hoặc vì …)",ex:"非经甲方书面同意或确认，乙方对甲方任何人员的个人借款均不构成预付款。",exvi:"Trừ khi bên A đồng ý hoặc xác nhận bằng văn bản, khoản vay cá nhân của bên B với nhân sự bên A không cấu thành khoản trả trước.",ans:"非经",opts:["非经","已经","自从","按照"]},
+ {pat:"…的，视为…",vi:"(Trường hợp)… thì được coi là…",ex:"逾期不提出异议的，视为甲方产品质量符合本合同约定要求。",exvi:"Quá hạn không khiếu nại thì được coi là chất lượng sản phẩm đáp ứng yêu cầu hợp đồng.",ans:"视为",opts:["视为","作为","成为","以为"]},
+ {pat:"视同违约",vi:"Coi như vi phạm hợp đồng",ex:"欠交租金超过七天，视同违约。",exvi:"Nợ tiền thuê quá 7 ngày được coi như vi phạm hợp đồng.",ans:"视同",opts:["视同","同意","相同","共同"]},
+ {pat:"应当 / 须",vi:"Phải, có nghĩa vụ (shall)",ex:"乙方应当在甲方交货前一次性给付甲方。",exvi:"Bên B phải thanh toán một lần cho bên A trước khi bên A giao hàng.",ans:"应当",opts:["应当","可以","有权","不得"]},
+ {pat:"不得",vi:"Không được",ex:"乙方不得将该房屋用作公司或代表处的注册地址。",exvi:"Bên B không được dùng căn nhà làm địa chỉ đăng ký của công ty hoặc văn phòng đại diện.",ans:"不得",opts:["不得","不必","不免","不顾"]},
+ {pat:"…的，…有权…",vi:"Trường hợp… thì … có quyền…",ex:"乙方未能按约定付款的，甲方有权拒绝交货。",exvi:"Bên B không thanh toán đúng thỏa thuận thì bên A có quyền từ chối giao hàng.",ans:"有权",opts:["有权","有关","有效","有限"]},
+ {pat:"由…提供 / 由…承担",vi:"Do … cung cấp / do … chịu",ex:"包装物由甲方提供，包装费用由乙方承担。",exvi:"Vật liệu đóng gói do bên A cung cấp, chi phí đóng gói do bên B chịu.",ans:"承担",opts:["承担","承认","担任","承包"]},
+ {pat:"并由…承担一切违约责任",vi:"Đồng thời … phải chịu mọi trách nhiệm vi phạm",ex:"甲方有权收回房屋，并由乙方承担一切违约责任。",exvi:"Bên A có quyền thu hồi nhà, đồng thời bên B phải chịu mọi trách nhiệm vi phạm.",ans:"并由",opts:["并由","因为","以便","即使"]},
+ {pat:"自…之日起…天内",vi:"Trong vòng … ngày kể từ ngày…",ex:"余款由乙方在收到甲方产品之日起三十天内付清。",exvi:"Số tiền còn lại bên B thanh toán hết trong vòng 30 ngày kể từ ngày nhận sản phẩm.",ans:"之日起",opts:["之日起","之前","以来","为止"]},
+ {pat:"提前…天…书面通知",vi:"Thông báo bằng văn bản trước … ngày",ex:"乙方须提前30天给予甲方书面通知。",exvi:"Bên B phải thông báo bằng văn bản cho bên A trước 30 ngày.",ans:"提前",opts:["提前","提出","前提","提供"]},
+ {pat:"最迟于 / 不迟于",vi:"Chậm nhất vào",ex:"甲方最迟于2011年8月10日交货。",exvi:"Bên A giao hàng chậm nhất vào ngày 10/8/2011.",ans:"最迟于",opts:["最迟于","最早于","至少于","直到"]},
+ {pat:"因…而产生的有关费用",vi:"Các chi phí liên quan phát sinh do…",ex:"乙方应按时支付因租用该房屋而产生的有关费用。",exvi:"Bên B phải thanh toán đúng hạn các chi phí liên quan phát sinh từ việc thuê nhà.",ans:"而产生",opts:["而产生","所以","从而","而已"]},
+ {pat:"因…而致…",vi:"Do … dẫn đến…",ex:"因火灾、战争等不可抗力因素而致本合同不能履行的，双方终止合同的履行。",exvi:"Do bất khả kháng như hỏa hoạn, chiến tranh… dẫn đến hợp đồng không thể thực hiện, hai bên chấm dứt thực hiện hợp đồng.",ans:"而致",opts:["而致","而且","而是","而后"]},
+ {pat:"无论何种原因",vi:"Dù vì bất kỳ lý do gì",ex:"无论何种原因终止、解除本合同的，乙方均应承担保密义务。",exvi:"Dù hợp đồng chấm dứt, hủy bỏ vì bất kỳ lý do gì, bên B vẫn phải chịu nghĩa vụ bảo mật.",ans:"无论",opts:["无论","尽管","虽然","既然"]},
+ {pat:"均",vi:"Đều",ex:"乙方知悉的甲方全部信息均为甲方的商业秘密。",exvi:"Toàn bộ thông tin của bên A mà bên B biết đều là bí mật kinh doanh của bên A.",ans:"均",opts:["均","亦","即","须"]},
+ {pat:"亦",vi:"Cũng (= 也)",ex:"甲方亦须在30天前通知乙方是否变动租金。",exvi:"Bên A cũng phải thông báo trước 30 ngày cho bên B nếu thay đổi giá thuê.",ans:"亦",opts:["亦","均","即","则"]},
+ {pat:"即可",vi:"Thì có thể, là có thể",ex:"乙方在付清押金、首期租金后即可入住。",exvi:"Sau khi bên B thanh toán đủ tiền cọc và tiền thuê kỳ đầu thì có thể dọn vào ở.",ans:"即可",opts:["即可","即使","既然","可是"]},
+ {pat:"若…，则…",vi:"Nếu … thì…",ex:"若乙方逾期不迁离，则甲方有权收回出租房屋。",exvi:"Nếu bên B quá hạn không dọn đi thì bên A có quyền thu hồi nhà.",ans:"则",opts:["则","却","且","乃"]},
+ {pat:"除非另有规定",vi:"Trừ trường hợp có quy định khác",ex:"除非另有规定，仲裁费用由败诉方承担。",exvi:"Trừ trường hợp có quy định khác, chi phí trọng tài do bên thua kiện chịu.",ans:"另有规定",opts:["另有规定","另行协商","另行处理","另一方"]},
+ {pat:"本着…的原则 / 精神",vi:"Trên nguyên tắc / tinh thần…",ex:"双方应本着互利的原则友好协商解决。",exvi:"Hai bên giải quyết bằng thương lượng hữu nghị trên nguyên tắc cùng có lợi.",ans:"本着",opts:["本着","根据着","按着","随着"]},
+ {pat:"一式…份，各执…份",vi:"Lập thành … bản, mỗi bên giữ … bản",ex:"本合同一式两份，甲、乙双方各执一份，具有同等法律效力。",exvi:"Hợp đồng lập thành hai bản, mỗi bên giữ một bản, có giá trị pháp lý như nhau.",ans:"各执",opts:["各执","各自","执行","各方"]},
+ {pat:"征得…同意",vi:"Được sự đồng ý của…",ex:"乙方对房屋进行装修须征得甲方同意。",exvi:"Bên B sửa sang nhà phải được sự đồng ý của bên A.",ans:"征得",opts:["征得","征用","获取到","取消"]},
+ {pat:"以…为最终解释 / 为准",vi:"Lấy … làm căn cứ (cuối cùng)",ex:"发生争议，以中文为最终解释。",exvi:"Khi có tranh chấp, bản tiếng Trung là căn cứ giải thích cuối cùng.",ans:"以中文为",opts:["以中文为","按中文是","用中文作","因中文为"]},
+ {pat:"擅自",vi:"Tự ý",ex:"未经对方同意中途擅自解除合同的，应支付违约金。",exvi:"Chưa được bên kia đồng ý mà tự ý chấm dứt hợp đồng giữa chừng thì phải trả tiền phạt vi phạm.",ans:"擅自",opts:["擅自","独自","亲自","自动"]},
+ {pat:"概由…负责",vi:"Nhất loạt do … chịu trách nhiệm",ex:"若发生与甲方有关的产权纠纷，概由甲方负责清理。",exvi:"Nếu xảy ra tranh chấp quyền sở hữu liên quan đến bên A, bên A chịu trách nhiệm giải quyết toàn bộ.",ans:"概由",opts:["概由","大概","由于","概括"]}
+];
+
+/* ---------------- LINK TO SENTENCES ---------------- */
+const zhOf=s=>s.dir==="zh-vi"?s.src:s.ref;
+const viOf=s=>s.dir==="zh-vi"?s.ref:s.src;
+const partsOf=zh=>zh.split(" / ").map(x=>x.trim()).filter(Boolean);
+VOCAB.forEach(v=>{v.parts=partsOf(v.zh);v.sents=SENTS.filter(s=>v.parts.some(p=>zhOf(s).includes(p)));});
+// keep only words that really appear in the translation sentences; drop duplicates
+{const seen=new Set();for(let i=VOCAB.length-1;i>=0;i--){const v=VOCAB[i];if(!v.sents.length||seen.has(v.zh))VOCAB.splice(i,1);else seen.add(v.zh);}VOCAB.reverse();VOCAB.reverse();}
+STRUCTS.forEach(st=>{st.sents=SENTS.filter(s=>zhOf(s).includes(st.ans));});
+for(let i=STRUCTS.length-1;i>=0;i--)if(!STRUCTS[i].sents.length)STRUCTS.splice(i,1);
+SENTS.forEach(s=>{const z=zhOf(s);s.words=VOCAB.filter(v=>v.sents.includes(s));s.structs=STRUCTS.filter(st=>z.includes(st.ans));});
+function hl(text,terms){
+  // escape, then wrap every occurrence of any term in <mark>
+  const ts=terms.filter(Boolean).sort((a,b)=>b.length-a.length);
+  if(!ts.length)return esc(text);
+  const re=new RegExp("("+ts.map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")+")","g");
+  return text.split(re).map((part,i)=>i%2?`<mark>${esc(part)}</mark>`:esc(part)).join("");
+}
+const sentNo=s=>SENTS.indexOf(s)+1;
+
+/* ---------------- STATE ---------------- */
+const KEY="ldhd-v1";
+let store={tr:{},vk:{}};
+try{const raw=localStorage.getItem(KEY);if(raw)store=Object.assign(store,JSON.parse(raw));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){}}
+
+let sample=null, aiChecked=false;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const isZh=s=>/[一-鿿]/.test(s);
+
+function renderStats(){
+  const done=Object.values(store.tr).filter(x=>typeof x.score==="number");
+  const avg=done.length?(done.reduce((a,b)=>a+b.score,0)/done.length).toFixed(1):"–";
+  const known=Object.keys(store.vk).filter(k=>store.vk[k]).length;
+  $("#stats").innerHTML=`<span class="stat">Đã chấm <b>${done.length}/${SENTS.length}</b> câu</span><span class="stat">Điểm trung bình <b>${avg}</b></span><span class="stat">Từ đã nhớ <b>${known}/${VOCAB.length}</b></span>`;
+}
+
+/* ---------------- ROUTING ---------------- */
+const VIEWS=["dich","tu-vung","cau-truc"];
+function route(){
+  const h=(location.hash||"").slice(1);const v=VIEWS.includes(h)?h:"dich";
+  document.querySelectorAll("section.view").forEach(s=>s.classList.toggle("on",s.id==="v-"+v));
+  document.querySelectorAll("nav.tabs a").forEach(a=>a.setAttribute("aria-current",a.dataset.view===v?"page":"false"));
+}
+window.addEventListener("hashchange",route);
+
+/* ---------------- AI ---------------- */
+function aiBanner(){
+  const b=$("#aiBanner");
+  if(sample){b.hidden=true;return;}
+  if(aiChecked){b.hidden=false;b.textContent="Chấm tự động không chạy được ở chế độ xem này. Bạn vẫn dịch được và tự so với bản tham khảo.";}
+}
+function parseJSON(t){
+  if(t&&typeof t==="object")return t;
+  const s=String(t||"");const a=s.indexOf("{"),b=s.lastIndexOf("}");
+  if(a<0||b<0)throw new Error("no json");
+  return JSON.parse(s.slice(a,b+1));
+}
+async function ask(prompt){
+  const r=await sample(prompt,{modelTier:"default"});
+  return r&&typeof r==="object"?r.text:r;
+}
+function aiErr(e){
+  if(e&&e.code==="not_granted")return "Bạn chưa cho phép trang hỏi Claude, nên chưa chấm được. Bấm lại nút để được hỏi quyền, hoặc tự so với bản tham khảo.";
+  if(e&&e.code==="rate_limited")return "Đang chấm quá nhiều trong thời gian ngắn. Đợi khoảng một phút rồi bấm lại.";
+  return "Chưa chấm được câu này. Thử bấm lại; nếu vẫn lỗi, hãy so với bản tham khảo.";
+}
+
+/* ---------------- DỊCH CÂU ---------------- */
+let dirF="all",tagF="all",undoneOnly=false,cur=0;
+const tags=[...new Set(SENTS.map(s=>s.tag))];
+$("#tagSel").innerHTML=`<option value="all">Mọi điều khoản</option>`+tags.map(t=>`<option>${esc(t)}</option>`).join("");
+function pool(){return SENTS.filter(s=>(dirF==="all"||s.dir===dirF)&&(tagF==="all"||s.tag===tagF)&&(!undoneOnly||!(store.tr[s.id]&&typeof store.tr[s.id].score==="number")));}
+let lastResult={};
+
+function renderSentence(){
+  const P=pool();const box=$("#sCard");
+  if(!P.length){box.innerHTML=`<p>Không còn câu nào khớp bộ lọc. Bỏ “Chỉ câu chưa chấm” hoặc chọn điều khoản khác.</p>`;return;}
+  if(cur>=P.length)cur=0;if(cur<0)cur=P.length-1;
+  const s=P[cur];const st=store.tr[s.id]||{};const toZh=s.dir==="vi-zh";
+  box.innerHTML=`
+   <div class="meta"><span class="pill dir">${toZh?"Việt → Trung":"Trung → Việt"}</span><span class="pill">${esc(s.tag)}</span><span>${esc(s.doc)}</span><span class="count">${cur+1} / ${P.length}</span></div>
+   <div class="src ${toZh?"":"zh"}">${esc(s.src)}</div>
+   ${s.note?`<div class="note">${esc(s.note)}</div>`:""}
+   <details id="hintBox"><summary>Từ mới & cấu trúc trong câu này (${s.words.length} từ · ${s.structs.length} cấu trúc)</summary>
+     <div class="kv">${s.words.map(v=>`<div><b>${esc(v.zh)}</b> · ${esc(v.vi)}</div>`).join("")}
+     ${s.structs.map(st=>`<div><b>${esc(st.pat)}</b> · ${esc(st.vi)}</div>`).join("")}</div>
+     ${s.words.length?`<div class="row" style="margin-top:8px"><button class="btn" type="button" id="drillBtn">Ôn từ của câu này</button></div>`:""}
+   </details>
+   <label for="ans" class="muted">Bản dịch của bạn (${toZh?"tiếng Trung":"tiếng Việt"})</label>
+   <textarea id="ans" class="${toZh?"zhin":""}" placeholder="${toZh?"在此输入中文译文…":"Gõ bản dịch tiếng Việt…"}">${esc(st.text||"")}</textarea>
+   <div class="row">
+     <button class="btn primary" id="gradeBtn" type="button">Chấm bài</button>
+     <button class="btn" id="refBtn" type="button">Xem bản tham khảo</button>
+     <span class="spacer"></span>
+     <button class="btn ghost" id="prevBtn" type="button" aria-label="Câu trước">‹ Trước</button>
+     <button class="btn ghost" id="rndBtn" type="button">Ngẫu nhiên</button>
+     <button class="btn ghost" id="nextBtn" type="button" aria-label="Câu sau">Sau ›</button>
+   </div>
+   <div id="resBox"></div>`;
+  const ta=$("#ans");
+  ta.addEventListener("input",()=>{store.tr[s.id]=Object.assign(store.tr[s.id]||{},{text:ta.value});save();});
+  $("#prevBtn").onclick=()=>{cur--;renderSentence();};
+  $("#nextBtn").onclick=()=>{cur++;renderSentence();};
+  $("#rndBtn").onclick=()=>{cur=Math.floor(Math.random()*P.length);renderSentence();};
+  $("#refBtn").onclick=()=>showRef(s);
+  $("#gradeBtn").onclick=()=>grade(s);
+  const db=$("#drillBtn");if(db)db.onclick=()=>{curSent=s;vSet="cur";refreshSetSel();vMode="flash";$("#vModeSeg").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.mode==="flash"));quiz=null;buildDeck();renderVocab();location.hash="tu-vung";};
+  if(st.result)showResult(s,st.result);
+}
+function showRef(s){
+  const toZh=s.dir==="vi-zh";const rb=$("#resBox");
+  if(rb.querySelector(".refOnly"))return;
+  rb.insertAdjacentHTML("beforeend",`<div class="result refOnly"><h3>Bản tham khảo (theo tài liệu)</h3><div class="ref ${toZh?"zh":""}">${esc(s.ref)}</div></div>`);
+}
+function cls(v,score){
+  if(score>=8||/^đúng/i.test(v))return "ok";
+  if(score>=5||/gần/i.test(v))return "mid";
+  return "bad";
+}
+function showResult(s,r){
+  const toZh=s.dir==="vi-zh";const c=cls(r.ket_luan||"",Number(r.diem)||0);
+  const errs=(r.loi||[]).filter(e=>e&&(e.doan||e.van_de));
+  const words=(r.tu_can_nho||[]).filter(w=>w&&w.tu);
+  $("#resBox").innerHTML=`<div class="result">
+    <div class="verdict"><div class="stamp ${c}"><div>${esc(r.diem)}<small>/10</small></div></div>
+      <div><span class="pill ${c}">${esc(r.ket_luan||"")}</span><p style="margin-top:6px">${esc(r.nhan_xet||"")}</p></div></div>
+    ${errs.length?`<div><h3>Lỗi cần sửa</h3><ul class="errs">${errs.map(e=>`<li>${e.doan?`<span class="from">${esc(e.doan)}</span>`:""}${e.sua?` → <span class="to">${esc(e.sua)}</span>`:""}<div class="muted">${esc(e.van_de||"")}</div></li>`).join("")}</ul></div>`:""}
+    ${r.ban_dich_goi_y?`<div><h3>Bản sửa từ bài của bạn</h3><div class="ref ${toZh?"zh":""}">${esc(r.ban_dich_goi_y)}</div></div>`:""}
+    <div><h3>Bản tham khảo (theo tài liệu)</h3><div class="ref ${toZh?"zh":""}">${esc(s.ref)}</div></div>
+    ${words.length?`<div><h3>Từ nên nhớ</h3><div class="words">${words.map(w=>`<span><b class="zh">${esc(w.tu)}</b> · ${esc(w.nghia||"")}</span>`).join("")}</div></div>`:""}
+    <div class="chat"><h3>Hỏi thêm về câu này</h3>
+      <div class="row"><input type="text" id="qIn" placeholder="Vd: vì sao dùng 解除 mà không dùng 终止?" aria-label="Câu hỏi thêm"><button class="btn" id="qBtn" type="button">Hỏi</button></div>
+      <div id="qOut"></div></div>
+  </div>`;
+  const qb=$("#qBtn");if(qb)qb.onclick=()=>followUp(s,r);
+  const qi=$("#qIn");if(qi)qi.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();followUp(s,r);}});
+}
+async function grade(s){
+  const text=($("#ans").value||"").trim();const rb=$("#resBox");
+  if(!text){rb.innerHTML=`<p class="muted">Gõ bản dịch trước rồi bấm Chấm bài.</p>`;return;}
+  if(!sample){rb.innerHTML=`<div class="banner">Chấm tự động không chạy được ở chế độ xem này. Đây là bản tham khảo để bạn tự so.</div>`;showRef(s);return;}
+  const btn=$("#gradeBtn");btn.disabled=true;
+  rb.innerHTML=`<div class="loading"><span class="dot"></span>Claude đang chấm bản dịch…</div>`;
+  const toZh=s.dir==="vi-zh";
+  const prompt=`Bạn là giảng viên môn Biên dịch nâng cao (dịch hợp đồng Trung–Việt) tại một trường đại học Việt Nam. Hãy chấm bản dịch của sinh viên.
+
+Chiều dịch: ${toZh?"tiếng Việt → tiếng Trung":"tiếng Trung → tiếng Việt"}
+Văn bản: ${s.doc} — điều khoản: ${s.tag}
+${s.note?"Lưu ý ngữ cảnh: "+s.note+"\n":""}Câu gốc: ${s.src}
+Bản dịch tham khảo của giáo trình (chỉ để đối chiếu, KHÔNG bắt sinh viên dịch giống hệt): ${s.ref}
+Bản dịch của sinh viên: ${text}
+
+Tiêu chí: (1) đúng và đủ nghĩa, không thiếu/thêm ý; (2) thuật ngữ pháp lý – hợp đồng chuẩn (vd. 违约金, 解除/终止/中止, 视为, 应当, 不得, bên A/bên B, tiền phạt vi phạm…); (3) văn phong văn bản pháp lý trang trọng, không khẩu ngữ; (4) ngữ pháp, chính tả, số liệu, ngày tháng, đúng vai trò bên A/bên B. Bản dịch khác bản tham khảo nhưng đúng nghĩa và đúng văn phong thì vẫn cho điểm cao.
+
+Chỉ trả về MỘT đối tượng JSON, không markdown, không giải thích ngoài JSON, theo đúng dạng:
+{"diem": số nguyên 0-10, "ket_luan": "Đúng" | "Gần đúng" | "Sai", "nhan_xet": "1–2 câu tiếng Việt, nói thẳng điểm mạnh và vấn đề chính", "loi": [{"doan": "đoạn sai trích nguyên văn từ bản của sinh viên", "van_de": "vì sao sai, ngắn gọn bằng tiếng Việt", "sua": "cách viết đúng"}], "ban_dich_goi_y": "bản dịch đã sửa, giữ tối đa cách diễn đạt của sinh viên", "tu_can_nho": [{"tu": "thuật ngữ tiếng Trung", "nghia": "nghĩa tiếng Việt"}]}
+"Đúng" khi 8–10 điểm, "Gần đúng" khi 5–7, "Sai" khi 0–4. Tối đa 5 lỗi, tối đa 4 từ cần nhớ. Nếu không có lỗi, để "loi": [].`;
+  try{
+    const out=await ask(prompt);const r=parseJSON(out);
+    r.diem=Math.max(0,Math.min(10,Math.round(Number(r.diem)||0)));
+    store.tr[s.id]=Object.assign(store.tr[s.id]||{},{text,score:r.diem,result:r});save();renderStats();
+    showResult(s,r);
+  }catch(e){
+    rb.innerHTML=`<div class="banner">${esc(aiErr(e))}</div>`;showRef(s);
+  }finally{btn.disabled=false;}
+}
+async function followUp(s,r){
+  const q=($("#qIn").value||"").trim();const out=$("#qOut");if(!q||!sample)return;
+  const btn=$("#qBtn");btn.disabled=true;
+  out.innerHTML=`<div class="loading"><span class="dot"></span>Đang trả lời…</div>`;
+  const prompt=`Bạn là giảng viên dịch hợp đồng Trung–Việt. Trả lời ngắn gọn (tối đa 120 từ), bằng tiếng Việt, câu hỏi của sinh viên về câu dịch sau. Dùng ví dụ tiếng Trung khi cần. Không dùng markdown.
+Câu gốc: ${s.src}
+Bản tham khảo: ${s.ref}
+Bản dịch của sinh viên: ${(store.tr[s.id]||{}).text||""}
+Nhận xét đã chấm: ${r.nhan_xet||""}
+Câu hỏi: ${q}`;
+  try{
+    const r2=await sample(prompt,{modelTier:"default",onText:({text})=>{out.innerHTML=`<div class="answer">${esc(text)}</div>`;}});
+    out.innerHTML=`<div class="answer">${esc(r2.text||"")}</div>`;
+  }catch(e){out.innerHTML=`<div class="banner">${esc(aiErr(e))}</div>`;}
+  finally{btn.disabled=false;}
+}
+$("#dirSeg").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;dirF=b.dataset.dir;$("#dirSeg").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));cur=0;renderSentence();});
+$("#tagSel").addEventListener("change",e=>{tagF=e.target.value;cur=0;renderSentence();});
+$("#undoneOnly").addEventListener("change",e=>{undoneOnly=e.target.checked;cur=0;renderSentence();});
+
+/* ---------------- TỪ VỰNG ---------------- */
+let vMode="flash",vSet="all",face="zh",deck=[],di=0,flipped=false,quiz=null,curSent=null;
+function refreshSetSel(){
+  const sets=Object.keys(VOCAB_RAW).map(k=>[k,VOCAB.filter(v=>v.set===k).length]).filter(x=>x[1]);
+  $("#setSel").innerHTML=`<option value="all">Tất cả từ trong bài dịch (${VOCAB.length})</option>`+
+    (curSent?`<option value="cur">Câu ${sentNo(curSent)} đang dịch (${curSent.words.length})</option>`:"")+
+    sets.map(([k,n])=>`<option value="${esc(k)}">${esc(k)} (${n})</option>`).join("");
+  $("#setSel").value=vSet;
+}
+refreshSetSel();
+function vPool(){if(vSet==="cur"&&curSent)return curSent.words;return VOCAB.filter(v=>vSet==="all"||v.set===vSet);}
+function buildDeck(){const P=vPool();const unk=P.filter(v=>!store.vk[v.zh]);deck=shuffle(unk.length?unk:P);di=0;flipped=false;}
+function renderVocab(){ if(vMode==="flash")renderFlash();else renderQuiz(); }
+function renderFlash(){
+  const box=$("#vocabBox");const P=vPool();
+  const known=P.filter(v=>store.vk[v.zh]).length;
+  if(!deck.length)buildDeck();
+  if(di>=deck.length){box.innerHTML=`<div class="card"><p>Hết lượt thẻ. Đã nhớ ${known}/${P.length} từ trong bộ này.</p><div class="row"><button class="btn primary" type="button" id="againBtn">Ôn lại từ chưa nhớ</button><button class="btn" type="button" id="resetSet">Đặt lại bộ này</button></div></div>`;
+    $("#againBtn").onclick=()=>{buildDeck();renderFlash();};
+    $("#resetSet").onclick=()=>{P.forEach(v=>delete store.vk[v.zh]);save();renderStats();buildDeck();renderFlash();};
+    return;}
+  const v=deck[di];const front=face==="zh"?v.zh:v.vi;
+  box.innerHTML=`<div class="card">
+    <div class="meta"><span class="pill">${esc(v.set)}</span><span class="count">${di+1} / ${deck.length}</span></div>
+    <div class="bar" aria-hidden="true"><i style="width:${P.length?Math.round(known/P.length*100):0}%"></i></div>
+    <div class="flash" id="flash" role="button" tabindex="0" aria-label="Lật thẻ">
+      ${flipped?`<div class="back">
+          <div class="face ${face==="zh"?"vi":""}">${esc(face==="zh"?v.vi:v.zh)}</div>
+          <div class="muted ${face==="zh"?"zh":""}" style="font-size:16px">${esc(front)}</div>
+          ${v.alt?`<div class="alt">Giải thích bằng từ khác: ${esc(v.alt)}</div>`:""}
+          ${v.sents[0]?`<div class="inSent">${hl(zhOf(v.sents[0]),v.parts)}<div class="hint">Câu ${sentNo(v.sents[0])} · ${esc(v.sents[0].doc)}${v.sents.length>1?` · có trong ${v.sents.length} câu`:""}</div></div>`:""}
+        </div>`:`<div><div class="face ${face==="vi"?"vi":""}">${esc(front)}</div><div class="hint">Chạm để lật</div></div>`}
+    </div>
+    <div class="row">
+      <button class="btn" type="button" id="noBtn">Chưa nhớ</button>
+      <button class="btn primary" type="button" id="yesBtn">Đã nhớ</button>
+      <span class="spacer"></span><span class="muted">Đã nhớ ${known}/${P.length}</span>
+    </div></div>`;
+  const f=$("#flash");const flip=()=>{flipped=!flipped;renderFlash();};
+  f.onclick=flip;f.onkeydown=e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();flip();}};
+  $("#yesBtn").onclick=()=>{store.vk[v.zh]=1;save();renderStats();di++;flipped=false;renderFlash();};
+  $("#noBtn").onclick=()=>{delete store.vk[v.zh];save();renderStats();deck.push(v);di++;flipped=false;renderFlash();};
+}
+function newQuiz(){
+  const P=vPool();const qs=shuffle(P).slice(0,Math.min(10,P.length));
+  quiz={qs,i:0,score:0,picked:null};
+}
+function renderQuiz(){
+  const box=$("#vocabBox");const P=vPool();
+  if(!quiz)newQuiz();
+  if(quiz.i>=quiz.qs.length){
+    box.innerHTML=`<div class="card"><div class="verdict"><div class="stamp ${quiz.score>=8?"ok":quiz.score>=5?"mid":""}"><div>${quiz.score}<small>/${quiz.qs.length}</small></div></div><p>Xong lượt trắc nghiệm.</p></div><div class="row"><button class="btn primary" type="button" id="newQ">Làm lượt mới</button></div></div>`;
+    $("#newQ").onclick=()=>{newQuiz();renderQuiz();};return;}
+  const v=quiz.qs[quiz.i];const askZh=face==="zh";
+  if(!quiz.opts){const others=shuffle(VOCAB.filter(x=>x.zh!==v.zh&&(P.length<8||P.includes(x)))).slice(0,3);quiz.opts=shuffle([v,...others]);}
+  box.innerHTML=`<div class="card">
+    <div class="meta"><span class="pill">${esc(v.set)}</span><span class="count">Câu ${quiz.i+1} / ${quiz.qs.length} · đúng ${quiz.score}</span></div>
+    <div class="flash" style="min-height:110px;cursor:default"><div class="face ${askZh?"":"vi"}">${esc(askZh?v.zh:v.vi)}</div></div>
+    <div class="opts">${quiz.opts.map((o,k)=>`<button type="button" data-k="${k}" class="${askZh?"":"zhopt"}">${esc(askZh?o.vi:o.zh)}</button>`).join("")}</div>
+    <div id="qFb"></div></div>`;
+  box.querySelectorAll(".opts button").forEach(b=>b.onclick=()=>{
+    if(quiz.picked!==null)return;const o=quiz.opts[+b.dataset.k];quiz.picked=o;
+    const right=o.zh===v.zh;if(right){quiz.score++;store.vk[v.zh]=1;save();renderStats();}
+    box.querySelectorAll(".opts button").forEach(x=>{const ox=quiz.opts[+x.dataset.k];if(ox.zh===v.zh)x.classList.add("right");else if(x===b)x.classList.add("wrong");x.disabled=true;});
+    $("#qFb").innerHTML=`${v.alt?`<p class="muted zh">Giải thích bằng từ khác: ${esc(v.alt)}</p>`:""}${v.sents[0]?`<div class="inSent" style="margin-bottom:8px">${hl(zhOf(v.sents[0]),v.parts)}<div class="hint">Câu ${sentNo(v.sents[0])} · ${esc(v.sents[0].doc)}</div></div>`:""}<div class="row"><button class="btn primary" type="button" id="nextQ">Câu tiếp</button></div>`;
+    $("#nextQ").onclick=()=>{quiz.i++;quiz.picked=null;quiz.opts=null;renderQuiz();};
+  });
+}
+$("#vModeSeg").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;vMode=b.dataset.mode;$("#vModeSeg").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));quiz=null;buildDeck();renderVocab();});
+$("#faceSeg").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;face=b.dataset.face;$("#faceSeg").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));flipped=false;if(quiz)quiz.opts=null;renderVocab();});
+$("#setSel").addEventListener("change",e=>{vSet=e.target.value;quiz=null;buildDeck();renderVocab();});
+
+/* ---------------- CẤU TRÚC ---------------- */
+let sMode="cloze",cz=null,mk=0;
+function newCloze(){cz={order:shuffle(STRUCTS.map((_,i)=>i)),i:0,score:0,done:false,opts:null,sent:null};}
+function renderStruct(){
+  const box=$("#structBox");
+  if(sMode==="list"){
+    box.innerHTML=`<p class="muted" style="margin:0">${STRUCTS.length} cấu trúc xuất hiện trong các câu dịch. Ví dụ dưới mỗi cấu trúc là câu thật trong bài.</p><div class="list">${STRUCTS.map(s=>`<div class="sitem"><div class="pat">${esc(s.pat)}</div><div>${esc(s.vi)}</div>${s.sents.slice(0,2).map(x=>`<div class="ex">${hl(zhOf(x),[s.ans])}</div><div class="exvi">Câu ${sentNo(x)} · ${esc(x.doc)}${s.sents.length>2?"":""}</div>`).join("")}${s.sents.length>2?`<div class="hint">Có trong ${s.sents.length} câu dịch</div>`:""}</div>`).join("")}</div>`;return;}
+  if(sMode==="cloze"){
+    if(!cz)newCloze();
+    if(cz.i>=cz.order.length){box.innerHTML=`<div class="card"><div class="verdict"><div class="stamp ${cz.score>=cz.order.length*.8?"ok":"mid"}"><div>${cz.score}<small>/${cz.order.length}</small></div></div><p>Đã làm hết ${cz.order.length} cấu trúc.</p></div><div class="row"><button class="btn primary" type="button" id="czNew">Làm lại</button></div></div>`;$("#czNew").onclick=()=>{newCloze();renderStruct();};return;}
+    const s=STRUCTS[cz.order[cz.i]];if(!cz.opts)cz.opts=shuffle(s.opts);
+    if(!cz.sent)cz.sent=s.sents[Math.floor(Math.random()*s.sents.length)];
+    const zt=zhOf(cz.sent);const blank=zt.replace(s.ans,"<b>＿＿</b>");
+    box.innerHTML=`<div class="card">
+      <div class="meta"><span class="pill dir">Điền cấu trúc</span><span class="count">${cz.i+1} / ${cz.order.length} · đúng ${cz.score}</span></div>
+      <div class="cloze">${blank.split("<b>＿＿</b>").map(esc).join("<b>＿＿</b>")}</div>
+      <div class="muted">${esc(viOf(cz.sent))}</div>
+      <div class="hint">Trích câu ${sentNo(cz.sent)} · ${esc(cz.sent.doc)}</div>
+      <div class="opts">${cz.opts.map(o=>`<button type="button" class="zhopt" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div>
+      <div id="czFb"></div></div>`;
+    box.querySelectorAll(".opts button").forEach(b=>b.onclick=()=>{
+      if(cz.done)return;cz.done=true;const ok=b.dataset.o===s.ans;if(ok)cz.score++;
+      box.querySelectorAll(".opts button").forEach(x=>{if(x.dataset.o===s.ans)x.classList.add("right");else if(x===b)x.classList.add("wrong");x.disabled=true;});
+      $("#czFb").innerHTML=`<div class="sitem"><div class="pat">${esc(s.pat)}</div><div>${esc(s.vi)}</div></div><div class="row" style="margin-top:8px"><button class="btn primary" type="button" id="czNext">Câu tiếp</button></div>`;
+      $("#czNext").onclick=()=>{cz.i++;cz.done=false;cz.opts=null;cz.sent=null;renderStruct();};
+    });
+    return;}
+  // make
+  const s=STRUCTS[mk];
+  box.innerHTML=`<div class="card">
+    <div class="meta"><span class="pill dir">Tự đặt câu</span><span class="count">${mk+1} / ${STRUCTS.length}</span></div>
+    <div class="pat">${esc(s.pat)}</div><div>${esc(s.vi)}</div>
+    <details><summary>Xem câu trong bài dịch</summary>${s.sents.slice(0,2).map(x=>`<div class="inSent" style="margin-top:6px">${hl(zhOf(x),[s.ans])}<div class="hint">Câu ${sentNo(x)} · ${esc(x.doc)}</div></div>`).join("")}</details>
+    <label for="mkIn" class="muted">Đặt một câu tiếng Trung có dùng cấu trúc này, theo văn phong hợp đồng</label>
+    <textarea id="mkIn" class="zhin" placeholder="在此输入句子…"></textarea>
+    <div class="row"><button class="btn primary" type="button" id="mkBtn">Chấm câu</button><span class="spacer"></span>
+      <button class="btn ghost" type="button" id="mkPrev">‹ Trước</button><button class="btn ghost" type="button" id="mkNext">Sau ›</button></div>
+    <div id="mkOut"></div></div>`;
+  $("#mkPrev").onclick=()=>{mk=(mk-1+STRUCTS.length)%STRUCTS.length;renderStruct();};
+  $("#mkNext").onclick=()=>{mk=(mk+1)%STRUCTS.length;renderStruct();};
+  $("#mkBtn").onclick=()=>gradeMake(s);
+}
+async function gradeMake(s){
+  const t=($("#mkIn").value||"").trim();const out=$("#mkOut");
+  if(!t){out.innerHTML=`<p class="muted">Viết câu trước rồi bấm Chấm câu.</p>`;return;}
+  if(!sample){out.innerHTML=`<div class="banner">Chấm tự động không chạy được ở chế độ xem này. So câu của bạn với câu mẫu ở trên.</div>`;return;}
+  const btn=$("#mkBtn");btn.disabled=true;
+  out.innerHTML=`<div class="loading"><span class="dot"></span>Claude đang chấm…</div>`;
+  const prompt=`Bạn là giảng viên dịch hợp đồng Trung–Việt. Sinh viên đặt câu tiếng Trung dùng cấu trúc "${s.pat}" (nghĩa: ${s.vi}). Câu mẫu trong bài: ${zhOf(s.sents[0])}
+Câu của sinh viên: ${t}
+Đánh giá: có dùng đúng cấu trúc không, ngữ pháp, văn phong hợp đồng trang trọng.
+Chỉ trả về MỘT đối tượng JSON, không markdown: {"diem": số nguyên 0-10, "ket_luan": "Đúng" | "Gần đúng" | "Sai", "nhan_xet": "1–2 câu tiếng Việt", "cau_sua": "câu tiếng Trung đã sửa (giữ ý của sinh viên)", "nghia": "nghĩa tiếng Việt của câu đã sửa"}`;
+  try{
+    const r=parseJSON(await ask(prompt));const d=Math.max(0,Math.min(10,Math.round(Number(r.diem)||0)));const c=cls(r.ket_luan||"",d);
+    out.innerHTML=`<div class="result"><div class="verdict"><div class="stamp ${c}"><div>${d}<small>/10</small></div></div><div><span class="pill ${c}">${esc(r.ket_luan||"")}</span><p style="margin-top:6px">${esc(r.nhan_xet||"")}</p></div></div>
+      ${r.cau_sua?`<div><h3>Câu đã sửa</h3><div class="ref zh">${esc(r.cau_sua)}</div><div class="muted" style="margin-top:4px">${esc(r.nghia||"")}</div></div>`:""}</div>`;
+  }catch(e){out.innerHTML=`<div class="banner">${esc(aiErr(e))}</div>`;}
+  finally{btn.disabled=false;}
+}
+$("#sModeSeg").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;sMode=b.dataset.mode;$("#sModeSeg").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));renderStruct();});
+
+/* ---------------- INIT ---------------- */
+route();renderStats();renderSentence();buildDeck();renderVocab();renderStruct();
+try{
+  if(window.claude&&typeof window.claude.use==="function"){
+    window.claude.use("sample").then(s=>{sample=s||null;aiChecked=true;aiBanner();}).catch(()=>{aiChecked=true;aiBanner();});
+  }else{aiChecked=true;aiBanner();}
+}catch(e){aiChecked=true;aiBanner();}
+</script>
+</body>
+</html>
